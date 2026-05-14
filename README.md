@@ -1,5 +1,7 @@
 # Real-Time pABR System
 
+**This project is in active development and has not been thoroughly tested.**
+
 This system runs parallel Auditory Brainstem Response (pABR) experiments with microsecond-precision audio/trigger timing while simultaneously pulling a live EEG stream via Lab Streaming Layer (LSL) to compute, analyze, and plot the brainstem responses in real-time.
 
 This has been developed and tested with a BioSemi ActiveTwo system running ActiView 10.4+. Future work is planned to add support for other amplifiers, such as the BrainVision ActiCHamp Plus.
@@ -85,6 +87,7 @@ Before running an experiment, you need stimulus files (`.hdf5`) and a paradigm f
 3.  Select the **Transducer** you are using from the dropdown. This ensures the correct calibration values are used.
 4.  Enter the **Start Epoch**. This defaults to `0` but can be set to a later number to resume an interrupted experiment.
 5.  Click **Launch Experiment**. The button will first check for a live LSL stream before starting the real-time analyzer GUI.
+    - You must start ActiView and have the data streaming (press "Start" in top left) before the GUI can be opened. Additionally, it is strongly recommended to begin recording the raw EEG data (.bdf) through ActiView before launching the experiment.
 
 ### 3.4. Interacting with the Analyzer
 
