@@ -547,7 +547,7 @@ def open_settings():
     btn_container = tk.Frame(btn_frame)
     btn_container.pack(expand=True)
     tk.Button(btn_container, text="Restore Defaults", command=restore_defaults, bg="lightcoral", font=('Arial', 10, 'bold')).pack(side="left", padx=10)
-    tk.Button(btn_container, text="Save Config", command=save_and_close, bg="lightblue", font=('Arial', 10, 'bold')).pack(side="left", padx=10)
+    tk.Button(btn_container, text="Apply Config", command=save_and_close, bg="lightblue", font=('Arial', 10, 'bold')).pack(side="left", padx=10)
 
 def refresh_dropdowns():
     ws = workspace_var.get()
