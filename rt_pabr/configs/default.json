@@ -1,0 +1,58 @@
+{
+    "CH_LEFT_NONINV": "FCz",
+    "CH_LEFT_INV": "A1",
+    "CH_RIGHT_NONINV": "FCz",
+    "CH_RIGHT_INV": "A2",
+    "WORKSPACE_DIR": "C:\\Users\\tomstoll\\Downloads\\test",
+    "FORCE_SOUNDDEVICE": false,
+    "BAYESIAN_WEIGHTING": true,
+    "TOGGLE_EXP_KEY": "1",
+    "XLIMS": [
+        -5,
+        25
+    ],
+    "TUBE_DELAY": 0.001,
+    "TMIN": -0.5,
+    "TMAX": 1.5,
+    "BUFFER_SEC": 10.0,
+    "DECIMATION_FACTOR": 2,
+    "TRANSDUCERS": {
+        "ER2": 0.01,
+        "ER3": 0.21134890398366465,
+        "HD 650": 0.02722701308077912
+    },
+    "L_FREQ": 30,
+    "H_FREQ": 1500,
+    "FILT_ORDER": 1,
+    "NOTCH_FREQS": [
+        60,
+        180,
+        300,
+        420,
+        540
+    ],
+    "NOTCH_WIDTH": 5,
+    "DYN_HP_OPTIONS": [
+        1,
+        30,
+        150
+    ],
+    "DYN_LP_OPTIONS": [
+        1500,
+        2000
+    ],
+    "DYN_ORDER_OPTIONS": [
+        1,
+        2,
+        3,
+        4
+    ],
+    "PEAK_MIN_MS": 4.0,
+    "PEAK_MAX_MS": 16.0,
+    "NOISE_WIN_MIN_MS": -350.0,
+    "NOISE_WIN_MAX_MS": -20.0,
+    "RESP_WIN_MIN_MS": 1.0,
+    "RESP_WIN_MAX_MS": 20.0,
+    "UDP_IP": "127.0.0.1",
+    "UDP_PORT": 55555
+}
