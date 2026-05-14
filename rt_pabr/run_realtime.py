@@ -270,7 +270,7 @@ def open_settings():
     current_cfg = config.load_config()
 
     # Configuration Presets Section
-    presets_dir = os.path.join(os.path.dirname(__file__), 'configs')
+    presets_dir = os.path.join(os.path.expanduser('~'), '.rt_pabr', 'configs')
     os.makedirs(presets_dir, exist_ok=True)
     
     preset_frame = tk.LabelFrame(scrollable_frame, text="Configuration Presets", padx=10, pady=5)
@@ -549,7 +549,8 @@ def open_settings():
     tk.Button(btn_container, text="Restore Defaults", command=restore_defaults, bg="lightcoral", font=('Arial', 10, 'bold')).pack(side="left", padx=10)
     tk.Button(btn_container, text="Save Config", command=save_and_close, bg="lightblue", font=('Arial', 10, 'bold')).pack(side="left", padx=10)
 
-if __name__ == '__main__':
+def main():
+    global root, workspace_var, sub_entry, file_var, trans_var, start_var, btn_launch, dd, trans_dd
     root = tk.Tk()
     root.title("Start Real-Time pABR")
     root.geometry("420x500")
@@ -685,3 +686,6 @@ if __name__ == '__main__':
         analyzer_proc.terminate()
         log_msg(f"Done. Log saved to {log_file_path}")
         log_f.close()
+
+if __name__ == '__main__':
+    main()

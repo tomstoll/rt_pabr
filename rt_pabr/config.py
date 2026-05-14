@@ -1,10 +1,12 @@
 import json
 import os
 
-CONFIG_FILE = 'config.json'
+CONFIG_DIR = os.path.join(os.path.expanduser('~'), '.rt_pabr')
+os.makedirs(CONFIG_DIR, exist_ok=True)
+CONFIG_FILE = os.path.join(CONFIG_DIR, 'config.json')
 
 DEFAULTS = {
-    "WORKSPACE_DIR": os.path.abspath(os.path.join(os.path.dirname(__file__), '..')),
+    "WORKSPACE_DIR": os.getcwd(),
     "FORCE_SOUNDDEVICE": False,
     "BAYESIAN_WEIGHTING": True,
     "CH_LEFT_NONINV": "None",

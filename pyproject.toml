@@ -25,6 +25,10 @@ dependencies = [
     "cmocean"
 ]
 
+[project.scripts]
+rt-pabr = "rt_pabr.run_realtime:main"
+rt_pabr = "rt_pabr.run_realtime:main"
+
 [tool.setuptools.packages.find]
 where = ["."]
 include = ["rt_pabr*"]
