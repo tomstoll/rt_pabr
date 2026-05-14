@@ -549,6 +549,24 @@ def open_settings():
     tk.Button(btn_container, text="Restore Defaults", command=restore_defaults, bg="lightcoral", font=('Arial', 10, 'bold')).pack(side="left", padx=10)
     tk.Button(btn_container, text="Save Config", command=save_and_close, bg="lightblue", font=('Arial', 10, 'bold')).pack(side="left", padx=10)
 
+def refresh_dropdowns():
+    ws = workspace_var.get()
+    os.makedirs(os.path.join(ws, 'stimuli'), exist_ok=True)
+    os.makedirs(os.path.join(ws, 'data'), exist_ok=True)
+    
+    abs_files = glob.glob(os.path.join(ws, "stimuli", "*.json"))
+    rel_files = []
+    for f in abs_files:
+        try:
+            rel_files.append(os.path.relpath(f, ws).replace('\\', '/'))
+        except ValueError:
+            rel_files.append(f.replace('\\', '/'))
+            
+    json_files = ['CALIBRATION'] + rel_files
+    dd['values'] = json_files
+    if not file_var.get() or file_var.get() not in json_files:
+        if json_files: file_var.set(json_files[0])
+
 def main():
     global root, workspace_var, sub_entry, file_var, trans_var, start_var, btn_launch, dd, trans_dd
     root = tk.Tk()
@@ -591,24 +609,6 @@ def main():
     file_var = tk.StringVar()
     dd = ttk.Combobox(root, textvariable=file_var, width=40, font=('Arial', 10), justify='center')
     dd.pack()
-    
-    def refresh_dropdowns():
-        ws = workspace_var.get()
-        os.makedirs(os.path.join(ws, 'stimuli'), exist_ok=True)
-        os.makedirs(os.path.join(ws, 'data'), exist_ok=True)
-        
-        abs_files = glob.glob(os.path.join(ws, "stimuli", "*.json"))
-        rel_files = []
-        for f in abs_files:
-            try:
-                rel_files.append(os.path.relpath(f, ws).replace('\\', '/'))
-            except ValueError:
-                rel_files.append(f.replace('\\', '/'))
-                
-        json_files = ['CALIBRATION'] + rel_files
-        dd['values'] = json_files
-        if not file_var.get() or file_var.get() not in json_files:
-            if json_files: file_var.set(json_files[0])
             
     refresh_dropdowns()
 
