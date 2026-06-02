@@ -627,6 +627,7 @@ def main():
     exp_paused = True
     btn_toggle = None
     def toggle_exp(event=None):
+        if experiment_finished: return
         nonlocal exp_paused
         exp_paused = not exp_paused
         send_udp_cmd('pause' if exp_paused else 'run')
@@ -643,6 +644,9 @@ def main():
     
     def stop_exp(event=None):
         nonlocal experiment_active
+        if experiment_finished:
+            experiment_active = False
+            return
         root = tk.Tk()
         root.withdraw()
         root.attributes('-topmost', True)
@@ -661,7 +665,8 @@ def main():
         
     def export_csv(event=None):
         base = os.path.basename(tab_file).split('.')[0]
-        csv_path = f"{base}_peaks.csv"
+        data_dir = os.path.dirname(tab_file)
+        csv_path = os.path.join(data_dir, f"{base}_peaks.csv")
         with open(csv_path, 'w', newline='') as f:
             writer = csv.writer(f)
             writer.writerow(["Ear", "Level_dB", "Frequency_Hz", "Latency_ms", "Amplitude_uV"])
@@ -817,7 +822,8 @@ def main():
     lf_exp.pack(side=tk.BOTTOM, fill=tk.X, pady=10)
     btn_toggle = tk.Button(lf_exp, text=f"Start / Resume\n(Hotkey: {config.TOGGLE_EXP_KEY})", command=toggle_exp, bg='lightgreen')
     btn_toggle.pack(fill=tk.X, pady=(0, 5))
-    tk.Button(lf_exp, text="Stop Experiment", command=stop_exp, bg='salmon').pack(fill=tk.X)
+    btn_stop = tk.Button(lf_exp, text="Stop Experiment", command=stop_exp, bg='salmon')
+    btn_stop.pack(fill=tk.X)
 
     lf_peaks = tk.LabelFrame(side_panel, text="Peak Management & Output", padx=10, pady=10)
     lf_peaks.pack(fill=tk.X, pady=10)
@@ -1210,7 +1216,11 @@ def main():
             experiment_finished = True
             prog_text.set_text('Experiment Finished')
             prog_text.set_color('red')
+            btn_stop.config(text="Close Analyzer")
+            btn_toggle.config(state=tk.DISABLED)
             trigger_blit()
+            export_png()
+            save_data()
                 
         fig.canvas.flush_events()
         if len(timestamps) == 0:
@@ -1218,6 +1228,7 @@ def main():
             
     # Final save and cleanup when experiment breaks the loop
     export_png(None)
+    export_csv()
     save_data()
     plt.close(fig)
 
