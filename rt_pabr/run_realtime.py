@@ -305,7 +305,7 @@ def open_settings():
     current_cfg = config.load_config()
 
     # Configuration Presets Section
-    presets_dir = os.path.join(os.path.expanduser('~'), '.rt_pabr', 'configs')
+    presets_dir = os.path.join(workspace_var.get(), 'configs')
     os.makedirs(presets_dir, exist_ok=True)
     
     preset_frame = tk.LabelFrame(scrollable_frame, text="Configuration Presets", padx=10, pady=5)
@@ -622,6 +622,7 @@ def main():
     tk.Label(frame_ws, text="Workspace:", font=('Arial', 10, 'bold')).pack(side='left')
     
     workspace_var = tk.StringVar(value=config.WORKSPACE_DIR)
+    config.CONFIG_FILE = os.path.join(config.WORKSPACE_DIR, 'rt_pabr_config.json')
     entry_ws = tk.Entry(frame_ws, textvariable=workspace_var, state='readonly', font=('Arial', 9))
     entry_ws.pack(side='left', fill='x', expand=True, padx=5)
     
@@ -629,6 +630,7 @@ def main():
         d = filedialog.askdirectory(initialdir=workspace_var.get())
         if d:
             workspace_var.set(d)
+            config.CONFIG_FILE = os.path.join(d, 'rt_pabr_config.json')
             current_cfg = config.load_config()
             current_cfg["WORKSPACE_DIR"] = d
             config.save_config(current_cfg)
@@ -715,7 +717,8 @@ def main():
         try:
             exp_proc.wait()
             if exp_proc.returncode == 0:
-                log_msg("Experiment finished successfully. Terminating real-time analyzer...")
+                log_msg("Experiment finished successfully. Waiting for user to close real-time analyzer...")
+                analyzer_proc.wait()
             else:
                 log_msg(f"Experiment ended with an error (code {exp_proc.returncode}). Terminating real-time analyzer...")
                 err_root = tk.Tk()
@@ -723,11 +726,12 @@ def main():
                 err_root.attributes('-topmost', True)
                 messagebox.showerror("Experiment Crashed", f"The experiment script ended with an error (code {exp_proc.returncode}).\n\nPlease check the terminal or log file:\n{log_file_path}", parent=err_root)
                 err_root.destroy()
+                analyzer_proc.terminate()
         except KeyboardInterrupt:
             exp_proc.terminate()
             log_msg("Experiment interrupted by user. Terminating real-time analyzer...")
+            analyzer_proc.terminate()
             
-        analyzer_proc.terminate()
         log_msg(f"Done. Log saved to {log_file_path}")
         log_f.close()
 
