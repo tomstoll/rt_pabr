@@ -290,6 +290,10 @@ with ExperimentController(run_file, verbose=True, screen_num=0,
             ec.write_data_line('stim_hash', data[data_fn[ri]]['stim_hash'])
         except KeyError:
             pass
+        try:
+            ec.write_data_line('seed', int(data[data_fn[ri]]['seed']))
+        except KeyError:
+            pass
         ec.write_data_line('ear_picks', run['ear_picks'])
         ec.write_data_line('band_picks', run['band_picks'])
         ec.write_data_line('f_band', data[data_fn[ri]]['f_band'])
