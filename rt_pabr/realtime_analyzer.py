@@ -56,7 +56,7 @@ def parse_tab_file(tab_file):
     run_data = {}
     current_run_num = None
     run_keys = ['run_file', 'stim_db', 'n_trials', 'n_tokens', 'ear_picks', 'band_picks', 
-                'f_band', 'rate', 'fn_stim', 'stim_hash', 'units', 'correction_factors']
+                'f_band', 'rate', 'fn_stim', 'stim_hash', 'seed', 'units', 'correction_factors']
     n_run_bits = None
     n_tok_bits = None
     setup_complete = False
@@ -393,7 +393,7 @@ def main():
             elif not is_used:
                 ax.tick_params(labelbottom=False)
             
-            pm, = ax.plot([], [], 'v', color=pabr_colors[j], markersize=8, zorder=5,
+            pm, = ax.plot([], [], 'v', color=pabr_colors[j], markerfacecolor='none', markeredgecolor=pabr_colors[j], markersize=8, zorder=5,
                           transform=mtransforms.offset_copy(ax.transData, fig=fig, x=0, y=5, units='points'))
             pt = ax.annotate('', (0, 0), xytext=(0, 15), textcoords='offset points', 
                              color=pabr_colors[j], fontsize=8, ha='center', va='bottom', 
@@ -526,6 +526,7 @@ def main():
                 peaks_amplitude[ear, i, j] = y_val
                 
                 pm.set_data([x_val], [y_val])
+                pm.set_markerfacecolor(pabr_colors[j])
                 peak_texts[(i, j)].xy = (x_val, y_val)
                 peak_texts[(i, j)].set_text(f'{x_val:.1f}ms\n{y_val:.2f}\u03BCV')
                 
@@ -544,6 +545,7 @@ def main():
             if event.button == 1:  # Left click (drag)
                 dragging_peak = (i, j)
                 user_modified_peaks[(ear, i, j)] = True
+                pm.set_markerfacecolor(pabr_colors[j])
             elif event.button == 3:  # Right click (remove)
                 user_modified_peaks[(ear, i, j)] = True
                 user_removed_peaks[(ear, i, j)] = True
@@ -795,6 +797,7 @@ def main():
             for j in range(n_freq):
                 user_modified_peaks[(active_ear, i, j)] = False
                 user_removed_peaks[(active_ear, i, j)] = False
+                peak_markers[(i, j)].set_markerfacecolor('none')
         needs_save = True
         needs_full_draw = True
         
@@ -1057,7 +1060,7 @@ def main():
                 else:
                     el_str = "--:--"
 
-                progress = (start_trial + processed_epochs) / total_epochs if total_epochs > 0 else 0
+                progress = (start_trial + presented_epochs) / total_epochs if total_epochs > 0 else 0
                 prog_rect.set_width(min(progress, 1.0))
                 rem_time = total_expected_time * (1.0 - progress)
                 if not experiment_finished:
@@ -1149,6 +1152,10 @@ def main():
                                     peak_markers[(i, j)].set_data([p_t], [p_y])
                                     peak_texts[(i, j)].xy = (p_t, p_y)
                                     peak_texts[(i, j)].set_text(f'{p_t:.1f}ms\n{p_y:.2f}\u03BCV')
+                                    if user_modified_peaks[(active_ear, i, j)]:
+                                        peak_markers[(i, j)].set_markerfacecolor(pabr_colors[j])
+                                    else:
+                                        peak_markers[(i, j)].set_markerfacecolor('none')
                                     peak_markers[(i, j)].set_visible(True)
                                     peak_texts[(i, j)].set_visible(True)
                                 else:
