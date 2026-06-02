@@ -718,11 +718,11 @@ def main():
                 log_msg("Experiment finished successfully. Terminating real-time analyzer...")
             else:
                 log_msg(f"Experiment ended with an error (code {exp_proc.returncode}). Terminating real-time analyzer...")
-            err_root = tk.Tk()
-            err_root.withdraw()
-            err_root.attributes('-topmost', True)
-            messagebox.showerror("Experiment Crashed", f"The experiment script ended with an error (code {exp_proc.returncode}).\n\nPlease check the terminal or log file:\n{log_file_path}", parent=err_root)
-            err_root.destroy()
+                err_root = tk.Tk()
+                err_root.withdraw()
+                err_root.attributes('-topmost', True)
+                messagebox.showerror("Experiment Crashed", f"The experiment script ended with an error (code {exp_proc.returncode}).\n\nPlease check the terminal or log file:\n{log_file_path}", parent=err_root)
+                err_root.destroy()
         except KeyboardInterrupt:
             exp_proc.terminate()
             log_msg("Experiment interrupted by user. Terminating real-time analyzer...")
