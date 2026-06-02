@@ -54,8 +54,10 @@ def generate_stimuli(rate=40, do_pips=True, n_minutes=2, save_dir='stimuli'):
     pips = np.array(pips)
 
     # construct the pip sequences
-    rand = np.random.RandomState(f_band.astype(int))
+    seed = np.random.randint(0, 2**31 - 1)
+    rand = np.random.RandomState(seed)
     print(np.round(f_band).astype(int))
+    print('Random seed: %i' % seed)
 
     # make a trial
     len_trial = int(np.round(dur_trial * fs))
@@ -132,7 +134,8 @@ def generate_stimuli(rate=40, do_pips=True, n_minutes=2, save_dir='stimuli'):
         pips=pips,
         dur_band=dur_band,
         interleave_flips=interleave_flips,
-        stim_hash=stim_hash
+        stim_hash=stim_hash,
+        seed=seed
         ), overwrite=False)
     print('Done. Saved to %s' % fn)
     return fn
