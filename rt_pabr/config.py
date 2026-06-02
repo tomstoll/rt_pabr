@@ -1,12 +1,20 @@
 import json
 import os
+import sys
 
-CONFIG_DIR = os.path.join(os.path.expanduser('~'), '.rt_pabr')
-os.makedirs(CONFIG_DIR, exist_ok=True)
-CONFIG_FILE = os.path.join(CONFIG_DIR, 'config.json')
+# Determine workspace directory from CLI arguments if provided, else use current working directory
+_ws_dir = os.getcwd()
+if '--workspace' in sys.argv:
+    try:
+        _idx = sys.argv.index('--workspace')
+        _ws_dir = sys.argv[_idx + 1]
+    except IndexError:
+        pass
+
+CONFIG_FILE = os.path.join(_ws_dir, 'rt_pabr_config.json')
 
 DEFAULTS = {
-    "WORKSPACE_DIR": os.getcwd(),
+    "WORKSPACE_DIR": _ws_dir,
     "FORCE_SOUNDDEVICE": True,
     "BAYESIAN_WEIGHTING": True,
     "CH_LEFT_NONINV": "None",
@@ -26,7 +34,7 @@ DEFAULTS = {
     "DYN_ORDER_OPTIONS": [1, 2, 3, 4],
     "TMIN": -0.5,
     "TMAX": 1.5,
-    "PEAK_MIN_MS": 4.0,
+    "PEAK_MIN_MS": 5.0,
     "PEAK_MAX_MS": 16.0,
     "NOISE_WIN_MIN_MS": -350.0,
     "NOISE_WIN_MAX_MS": -20.0,
