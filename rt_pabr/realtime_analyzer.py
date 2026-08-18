@@ -56,7 +56,7 @@ def parse_tab_file(tab_file):
     run_data = {}
     current_run_num = None
     run_keys = ['run_file', 'stim_db', 'n_trials', 'n_tokens', 'ear_picks', 'band_picks', 
-                'f_band', 'rate', 'fn_stim', 'stim_hash', 'seed', 'units', 'correction_factors']
+                'f_band', 'rate', 'fn_stim', 'stim_hash', 'seed', 'units', 'correction_factors', 'title']
     n_run_bits = None
     n_tok_bits = None
     setup_complete = False
@@ -373,7 +373,9 @@ def main():
 
             if i == 0: ax.set_title('Clicks' if freq == 0 else f'{int(freq)} Hz')
             if j == 0: 
-                ax.annotate(f'{stim_type}\n{int(lvl)} dB {units}\n{rate_str}', xy=(-0.75, 0.5), xycoords='axes fraction', 
+                title = run_data[run_idx].get('title', '')
+                ann_text = f'{title}\n{stim_type}\n{int(lvl)} dB {units}\n{rate_str}' if title else f'{stim_type}\n{int(lvl)} dB {units}\n{rate_str}'
+                ax.annotate(ann_text, xy=(-0.75, 0.5), xycoords='axes fraction', 
                             ha='center', va='center', fontsize=12, fontweight='bold')
             if j == first_used_j:
                 ax.set_ylabel('Potential (\u03BCV)')

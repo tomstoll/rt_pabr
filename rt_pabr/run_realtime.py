@@ -106,7 +106,7 @@ def open_creator():
             return
             
         types_groups = {'clicks': [], 'pips': []}
-        for stim_var, db_var, _, _, _ in runs:
+        for stim_var, db_var, *rest in runs:
             stim = stim_var.get().lower()
             t = 'pips' if 'pips' in stim else 'clicks'
             try: db = int(db_var.get())
@@ -159,6 +159,10 @@ def open_creator():
         tk.Checkbutton(row2, text="Left", variable=ear_vars[0]).pack(side='left')
         tk.Checkbutton(row2, text="Right", variable=ear_vars[1]).pack(side='left', padx=(0, 15))
         
+        tk.Label(row2, text="Title:").pack(side='left')
+        title_var = tk.StringVar(value="")
+        tk.Entry(row2, textvariable=title_var, width=15).pack(side='left')
+        
         row3 = tk.Frame(run_frame)
         row3.pack(fill='x', pady=2, padx=5)
         
@@ -177,7 +181,7 @@ def open_creator():
         stim_var.trace_add('write', update_band_state)
         update_band_state()  # Set initial state
         
-        runs.append((stim_var, db_var, tr_var, ear_vars, band_vars))
+        runs.append((stim_var, db_var, tr_var, ear_vars, band_vars, title_var))
         update_filename()
         
     add_run()
@@ -193,14 +197,14 @@ def open_creator():
         units_val = corr_vars[-1].get()
 
         out = []
-        for stim, db, tr, e_vars, b_vars in runs:
+        for stim, db, tr, e_vars, b_vars, title in runs:
             ear_picks = [i for i, v in enumerate(e_vars) if v.get()]
             if len(ear_picks) == 2: ear_picks = []
             
             band_picks = [i for i, v in enumerate(b_vars) if v.get()]
             if len(band_picks) == 5: band_picks = []
             
-            out.append({
+            run_dict = {
                 "fn_stim": stim.get(), 
                 "stim_db": int(db.get()), 
                 "n_trials": int(tr.get()), 
@@ -208,7 +212,11 @@ def open_creator():
                 "ear_picks": ear_picks,
                 "correction_factors": cf,
                 "units": units_val
-            })
+            }
+            title_str = title.get().strip()
+            if title_str:
+                run_dict["title"] = title_str
+            out.append(run_dict)
         fn = fn_var.get()
         if not fn.endswith('.json'): fn += '.json'
         if 'stimuli' not in fn and '/' not in fn and '\\' not in fn:

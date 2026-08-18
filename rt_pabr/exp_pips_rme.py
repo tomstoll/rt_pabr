@@ -301,6 +301,8 @@ with ExperimentController(run_file, verbose=True, screen_num=0,
         ec.write_data_line('invert_sign', data[data_fn[ri]]['invert_sign'])
         ec.write_data_line('units', run.get('units', 'peSPL'))
         ec.write_data_line('correction_factors', run.get('correction_factors', [0.0]*6))
+        if 'title' in run:
+            ec.write_data_line('title', run['title'])
 
     ec.write_data_line('setup_complete', 1)
 
