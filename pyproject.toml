@@ -20,7 +20,7 @@ dependencies = [
     "joblib",
     "h5io",
     "rtmixer",
-    "expyfun",
+    "expyfun>=3.0.0",
     "sounddevice"
 ]
 
