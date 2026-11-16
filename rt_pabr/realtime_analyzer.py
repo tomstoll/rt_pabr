@@ -934,7 +934,7 @@ def main():
                 ring_buffer[:, -n_new:] = chunk_eeg
 
             # Detect triggers (rising edges)
-            chunk_status_int = np.bitwise_and(chunk_status.astype(int), 255)
+            chunk_status_int = np.bitwise_and(chunk_status.astype(int), 15)
             status_concat = np.concatenate(([prev_status], chunk_status_int))
             edges = np.where(np.diff(status_concat) > 0)[0]
             for idx in edges:
